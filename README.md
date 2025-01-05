@@ -1,44 +1,96 @@
-# obsidian-mcp MCP Server
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/58897c99-bc54-4a88-8c7a-b04233d688a1" alt="Header Image" width="800">
 
-A Model Context Protocol server
+  <h1>obsidian-mcp MCP Server</h1>
 
-This is a TypeScript-based MCP server that implements a simple notes system. It demonstrates core MCP concepts by providing:
+  <p>
+    <a href="https://github.com/Sunwood-ai-labs/obsidian-mcp">
+      <img src="https://img.shields.io/github/stars/Sunwood-ai-labs/obsidian-mcp?style=social" alt="GitHub Stars">
+    </a>
+    <a href="https://github.com/Sunwood-ai-labs/obsidian-mcp/issues">
+      <img src="https://img.shields.io/github/issues/Sunwood-ai-labs/obsidian-mcp" alt="GitHub Issues">
+    </a>
+    <a href="https://github.com/Sunwood-ai-labs/obsidian-mcp/blob/main/LICENSE">
+      <img src="https://img.shields.io/github/license/Sunwood-ai-labs/obsidian-mcp" alt="License">
+    </a>
+  </p>
 
-- Resources representing text notes with URIs and metadata
-- Tools for creating new notes
-- Prompts for generating summaries of notes
+  <p>
+    <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
+    <img src="https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white" alt="Node.js">
+    <img src="https://img.shields.io/badge/Obsidian-7C3AED?logo=obsidian&logoColor=white" alt="Obsidian">
+    <img src="https://img.shields.io/badge/MCP-FF6F61?logo=data:image/svg+xml;base64,..." alt="MCP">
+  </p>
+</div>
+
+A Model Context Protocol server for Obsidian integration
+
+This is a TypeScript-based MCP server that implements integration with Obsidian. It demonstrates core MCP concepts by providing:
+
+- Resources representing Obsidian vault contents
+- Tools for accessing vault data
+- API integration with Obsidian
+
+## Project Statistics
+
+- Total lines of code: 345
+- Main files:
+  - `src/tool-handlers.ts` (76 lines)
+  - `src/resource-handlers.ts` (45 lines)
+  - `src/server.ts` (32 lines)
+  - `src/api-client.ts` (25 lines)
+
+## Directory Structure
+
+```
+obsidian-mcp/
+├── .codegpt/
+│   └── head
+├── src/
+│   ├── api-client.ts
+│   ├── index.ts
+│   ├── resource-handlers.ts
+│   ├── server.ts
+│   └── tool-handlers.ts
+├── .SourceSageignore
+├── package.json
+├── README.md
+└── tsconfig.json
+```
 
 ## Features
 
 ### Resources
-- List and access notes via `note://` URIs
-- Each note has a title, content and metadata
-- Plain text mime type for simple content access
+- Access Obsidian server info via `obsidian://server-info` URI
+- Get vault contents with metadata
+- JSON format for easy integration
 
 ### Tools
-- `create_note` - Create new text notes
-  - Takes title and content as required parameters
-  - Stores note in server state
+- `get_vault_contents` - Retrieve contents of Obsidian vault
+  - Takes path as optional parameter (default: root directory)
+  - Returns structured JSON response
 
-### Prompts
-- `summarize_notes` - Generate a summary of all stored notes
-  - Includes all note contents as embedded resources
-  - Returns structured prompt for LLM summarization
+### API Integration
+- Secure HTTPS connection with Obsidian API
+- Custom axios client with error handling
+- Windows path normalization support
 
 ## Development
 
-Install dependencies:
+### Prerequisites
+- Node.js v18+
+- TypeScript 5.3+
+- Obsidian API key (set as OBSIDIAN_API_KEY environment variable)
+
+### Setup
 ```bash
+# Install dependencies
 npm install
-```
 
-Build the server:
-```bash
+# Build the server
 npm run build
-```
 
-For development with auto-rebuild:
-```bash
+# Start development server with auto-rebuild
 npm run watch
 ```
 
@@ -53,18 +105,31 @@ On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 {
   "mcpServers": {
     "obsidian-mcp": {
-      "command": "/path/to/obsidian-mcp/build/index.js"
+      "command": "/path/to/obsidian-mcp/build/index.js",
+      "env": {
+        "OBSIDIAN_API_KEY": "your-api-key-here"
+      }
     }
   }
 }
 ```
 
-### Debugging
+## Debugging
 
-Since MCP servers communicate over stdio, debugging can be challenging. We recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), which is available as a package script:
+We recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector):
 
 ```bash
 npm run inspector
 ```
 
 The Inspector will provide a URL to access debugging tools in your browser.
+
+## Dependencies
+
+### Runtime
+- @modelcontextprotocol/sdk: MCP server implementation
+- axios: HTTP client for API communication
+
+### Development
+- @types/node: TypeScript definitions for Node.js
+- typescript: TypeScript compiler
